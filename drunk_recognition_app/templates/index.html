@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drunk Detection App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <!-- header -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 w-full z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-primary">
+                        <span>EAH</span>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-600 hover:text-primary font-medium transition duration-150">
+                        Home
+                    </a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary font-medium transition duration-150">
+                        About
+                    </a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-toggle" class="btn-ghost btn-icon" aria-label="Toggle mobile menu">
+                        <svg class="h-6 w-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden pb-4 hidden">
+                <div class="flex flex-col space-y-3">
+                    <a href="index.html"
+                        class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                        Home
+                    </a>
+                    <a href="about.html"
+                        class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                        About
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- main -->
+    <main>
+        <div class="max-w-sm w-full bg-white shadow-md rounded-lg p-6 mt-20">
+            <h1 class="text-xl font-bold mb-4 text-center text-tilte">Drunk Detection</h1>
+            <button id="remoteCameraButton"
+                class="w-full bg-secondary hover:bg-tertiary text-white font-bold py-2 px-4 rounded mb-4">
+                Connect to Remote Camera
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" class="block w-full mb-4">
+            <button id="uploadButton"
+                class="w-full bg-primary_2 hover:bg-secondary text-white font-bold py-2 px-4 rounded">
+                Predict
+            </button>
+
+            <div id="result" class="mt-4 hidden">
+                <p id="predictionText" class="text-center font-semibold text-secondary"></p>
+                <img id="imageDisplay" class="mt-2 w-full hidden" alt="Processed Image">
+            </div>
+        </div>
+    </main>
+
+    <script src="../static/script.js"></script>
+</body>
