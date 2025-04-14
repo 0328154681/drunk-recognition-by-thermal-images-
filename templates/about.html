@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Company</title>
+    <link 
+        href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" 
+        rel="stylesheet" 
+    />
+    <link rel="stylesheet" href="../static/styles.css">
+
+    <style>
+     
+         header {
+             background: linear-gradient(90deg, rgb(244, 143, 143), rgb(230, 198, 139), rgb(230, 230, 133), rgb(146, 228, 146), rgb(165, 165, 237), rgb(200, 142, 242), violet);
+             background-size: 400% 400%;
+             animation: rainbowFlow 6s infinite linear;
+         }
+     
+         @keyframes rainbowFlow {
+             0% { background-position: 0% 50%; }
+             100% { background-position: 100% 50%; }
+         }
+     </style>
+
+</head>
+
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Header Section -->
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center">
+                            <!-- font chữ montserrat và đổ bóng-->
+                        <a href="/" class="text-2xl font-bold text-primary" 
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: rgb(98, 154, 234);
+                                text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;">
+                            <span>AI4Life</span>
+                        </a>
+                    </div>
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="/" style="font-family: sans-serif; font-weight: bold; font-size: 20px; background-color: #e0e0e0; padding: 10px 20px; border-radius: 15px; text-decoration: none; transition: background 0.3s ease;"
+                           onmouseover="this.style.backgroundColor='#909090'"
+                           onmouseout="this.style.backgroundColor='#b0b0b0'">
+                            Home
+                        </a>
+                        <a href="about.html" style="font-family: sans-serif; font-weight: bold; font-size: 20px; background-color: #e0e0e0; padding: 10px 20px; border-radius: 15px; text-decoration: none; transition: background 0.3s ease;"
+                           onmouseover="this.style.backgroundColor='#909090'"
+                           onmouseout="this.style.backgroundColor='#b0b0b0'">
+                            About
+                        </a>
+                    </nav>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-toggle" class="btn-ghost btn-icon" aria-label="Toggle mobile menu">
+                            <svg class="h-6 w-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="3" y1="12" x2="21" y2="12"></line>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <line x1="3" y1="18" x2="21" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile menu -->
+                <div id="mobile-menu" class="md:hidden pb-4 hidden">
+                    <div class="flex flex-col space-y-3">
+                        <a href="index.html"
+                            class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                            Home
+                        </a>
+                        <a href="about.html"
+                            class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                            About
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section id="about" class="py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row items-center justify-between">
+                        <div class="md:w-1/2 mb-10 md:mb-0">
+                            <h1 class="text-4xl sm:text-5xl font-bold leading-tight mb-6">
+                                Transforming Your Work with
+                                <span class="text-primary">Drunk Recognition System</span>
+                            </h1>
+                            <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-xl">
+                                An intuitive platform that makes the Drunk recognition process simpler, faster and more
+                                effective than ever before.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#features" class="btn btn-primary btn-lg rounded-lg shadow-md hover:shadow-lg">
+                                    Explore Features
+                                </a>
+                                <a href="#how-it-works" class="btn btn-outline btn-lg rounded-lg hover:bg-gray-50">
+                                    How It Works
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2">
+                            <div class="rounded-lg shadow-xl overflow-hidden">
+                                <img src="../images/the_drunk.jpg"
+                                    alt="Team collaborating on a digital platform" class="w-full h-auto" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="py-20 bg-white">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold mb-4">Our Core Features</h2>
+                        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                            Our platform offers powerful tools to help you achieve
+                            more.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Feature 1 -->
+                        <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                            <div class="p-8">
+                                <div class="text-primary mb-4">
+                                    <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3">Lightning Fast Performance</h3>
+                                <p class="text-gray-600">
+                                    Experience blazing fast load times and smooth interactions throughout the platform.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                            <div class="p-8">
+                                <div class="text-primary mb-4">
+                                    <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        <polyline points="9 12 11 14 15 10"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3">Enterprise-Grade Security</h3>
+                                <p class="text-gray-600">
+                                    Your data is protected with industry-leading security protocols and encryption.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                            <div class="p-8">
+                                <div class="text-primary mb-4">
+                                    <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <polyline points="1 20 1 14 7 14"></polyline>
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-semibold mb-3">Real-Time Collaboration</h3>
+                                <p class="text-gray-600">
+                                    Work together with your team in real-time with seamless synchronization.
+                                </p>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section id="how-it-works" class="py-20 bg-gray-50">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold mb-4">How It Works</h2>
+                        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                            Our streamlined process makes it easy to get started and achieve results quickly.
+                        </p>
+                    </div>
+
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Step 1 -->
+                        <div class="flex flex-col lg:flex-row items-center mb-16">
+                            <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pr-12">
+                                <div class="bg-white p-2 rounded-lg shadow-md inline-block">
+                                    <div
+                                        class="bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold">
+                                        1</div>
+                                </div>
+                                <h3 class="text-2xl font-bold mt-6 mb-4">Upload The Image</h3>
+                                <p class="text-gray-600">
+                                    You can use a remote thermal camera to take and upload an image or directly upload your image.
+                                </p>
+                            </div>
+                            <div class="lg:w-1/2">
+                                <div class="rounded-lg shadow-lg overflow-hidden bg-gray-100">
+                                    <img src="../images/step_1.png" alt="Step 1" class="w-full h-auto"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="flex flex-col lg:flex-row-reverse items-center mb-16">
+                            <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pl-12">
+                                <div class="bg-white p-2 rounded-lg shadow-md inline-block">
+                                    <div
+                                        class="bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold">
+                                        2</div>
+                                </div>
+                                <h3 class="text-2xl font-bold mt-6 mb-4">Prediction</h3>
+                                <p class="text-gray-600">
+                                    After pressing the predict button, the result is displayed below
+                                </p>
+                            </div>
+                            <div class="lg:w-1/2">
+                                <div class="rounded-lg shadow-lg overflow-hidden bg-gray-100">
+                                    <img src="../images/step_2.png" alt="Step 2" class="w-full h-auto" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="flex flex-col lg:flex-row items-center">
+                            <div class="lg:w-1/2 mb-8 lg:mb-0 lg:pr-12">
+                                <div class="bg-white p-2 rounded-lg shadow-md inline-block">
+                                    <div
+                                        class="bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold">
+                                        3</div>
+                                </div>
+                                <h3 class="text-2xl font-bold mt-6 mb-4">Check all the predictions</h3>
+                                <p class="text-gray-600">
+                                    The system automatically creates a folder named <strong>the_drunk</strong>, all the drunk person predictions are stored in the folder.
+                                </p>
+                            </div>
+                            <div class="lg:w-1/2">
+                                <div class="rounded-lg shadow-lg overflow-hidden bg-gray-100">
+                                    <img src="../images/step_3.png" alt="Step 3" class="w-full h-half" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section id="team" class="py-20 bg-white">
+                <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold mb-4">Meet Our Team</h2>
+                        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                            A passionate group of experts committed to creating the best experience for our users.
+                        </p>
+                    </div>
+            
+                    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <!-- Team Member 1 -->
+                        <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="w-full h-64 bg-gray-200 relative">
+                                <div class="w-full h-full flex items-center justify-center text-4xl bg-primary text-white">
+                                    <img src="../images/joey.png" alt="Leader" class="w-half h-full object-cover" />
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-1">Vo Thanh Bang</h3>
+                                <p class="text-primary font-medium mb-3">Developer</p>
+                                <p class="text-gray-600 mb-4">
+                                    Bang coded the system, led our project vision and strategic
+                                    direction.
+                                </p>
+                            </div>
+                        </div>
+            
+                        <!-- Team Member 2 -->
+                        <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="w-full h-64 bg-gray-200 relative">
+                                <div class="w-full h-full flex items-center justify-center text-4xl bg-primary text-white">
+                                    <img src="../images/oggy.png" alt="Member"
+                                         class="w-half h-full object-cover" />
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-1">Hoang Ngoc Dung</h3>
+                                <p class="text-primary font-medium mb-3">Data engineer</p>
+                                <p class="text-gray-600 mb-4">
+                                    Dung collected data and preprocessed the images.
+                                </p>    
+                            </div>
+                        </div>
+            
+                        <!-- Team Member 3 -->
+                        <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="w-full h-64 bg-gray-200 relative">
+                                <div class="w-full h-full flex items-center justify-center text-4xl bg-primary text-white">
+                                    <img src="../images/dee_dee.png" alt="Member"
+                                    class="w-half h-full object-cover" />
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-1">Nguyen Van Thanh Thong</h3>
+                                <p class="text-primary font-medium mb-3">Developer</p>
+                                <p class="text-gray-600 mb-4">
+                                    Thong researched and developed an image processing algorithm which removes texts and inpants the image.
+                                </p>
+                            </div>
+                        </div>
+            
+                        <!-- Team Member 4 -->
+                        <div class="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                            <div class="w-full h-64 bg-gray-200 relative">
+                                <div class="w-full h-full flex items-center justify-center text-4xl bg-primary text-white">
+                                    <img src="../images/marky.png" alt="Member"
+                                    class="w-half h-full object-cover" />
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-1">Ngo Dinh Luan</h3>
+                                <p class="text-primary font-medium mb-3">Researcher</p>
+                                <p class="text-gray-600 mb-4">
+                                    Luan researched the optimal methodologies and wrote a final paper.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="mb-6 text-2xl font-bold text-primary">FPT.AI</div>
+                        <p class="text-gray-400 mb-4">
+                            Creating innovative solutions to transform your workflow and productivity.
+                        </p>
+                    </div>
+        
+                    <div>
+                        <h3 class="text-xl font-bold mb-8">Contact Us</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <svg class="text-primary mt-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span class="text-gray-400">123 High technology parl, district 9, HCM</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="text-primary mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path
+                                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                    </path>
+                                </svg>
+                                <span class="text-gray-400">(+84) 83 288 7925</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="text-primary mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                    </path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                <span class="text-gray-400">info@company.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 mb-4 md:mb-0">©
+                        <script>document.write(new Date().getFullYear())</script> Company. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../static/script.js"></script>
+    
+    <script type="module">
+	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	    createChat({
+		    webhookUrl:
+                'https://ai4life.app.n8n.cloud/webhook/1c24f88a-e60e-4e2b-8bd0-e776bdfb879a/chat',
+                initialMessages: [
+                'Xin chào! 👋',
+                'Tôi là Drober. Chào mừng bạn truy cập vào trang web drunk & sober. Tôi có thể giúp gì cho bạn?'
+            ],
+            i18n: {
+                en: {
+                    title: 'Xin chào! 👋',
+                    subtitle: 'Bắt đầu trò chuyện. Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7.',
+                    footer: '',
+                    getStarted: 'Cuộc trò chuyện mới',
+                    inputPlaceholder: 'Nhập câu hỏi của bạn...',
+                },
+            },
+	    });
+    </script>
+</body>
+
+</html>

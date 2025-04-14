@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drunk Detection App</title>
+    
+    <link 
+        href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" 
+        rel="stylesheet" 
+    />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles.css">
+
+    <style>
+       body {
+        background-color: white; /* Mặc định là nền trắng */
+    }
+
+    /* Nếu muốn thêm ảnh nền, chỉ cần bỏ comment dòng background-image */
+    .background-active {
+        /*background-image: url('../images/background.jpg'); /* Đường dẫn đến ảnh */
+        background-size: cover; /* Phủ toàn bộ màn hình */
+        background-position: center; /* Căn giữa ảnh */
+        background-repeat: no-repeat; /* Không lặp lại */
+        background-attachment: fixed; /* Cố định background */
+    }
+    
+        header {
+            background: linear-gradient(90deg, rgb(244, 143, 143), rgb(230, 198, 139), rgb(230, 230, 133), rgb(146, 228, 146), rgb(165, 165, 237), rgb(200, 142, 242), violet);
+            background-size: 400% 400%;
+            animation: rainbowFlow 6s infinite linear;
+        }
+    
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <!-- header -->
+    <header class="bg-white shadow-sm fixed top-0 left-0 w-full z-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <!-- font chữ montserrat và đổ bóng-->
+                    <a href="/" class="text-2xl font-bold text-primary" 
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: rgb(98, 154, 234);
+                            text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;">
+                        <span>AI4Life</span>
+                    </a>
+                </div>
+                <!--chỉnh kích thước chữ và tạo shape styles-->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" style="font-family: sans-serif; font-weight: bold; font-size: 20px; background-color: #e0e0e0; padding: 10px 20px; border-radius: 15px; text-decoration: none; transition: background 0.3s ease;"
+                       onmouseover="this.style.backgroundColor='#909090'"
+                       onmouseout="this.style.backgroundColor='#b0b0b0'">
+                        Home
+                    </a>
+                    <a href="about.html" style="font-family: sans-serif; font-weight: bold; font-size: 20px; background-color: #e0e0e0; padding: 10px 20px; border-radius: 15px; text-decoration: none; transition: background 0.3s ease;"
+                       onmouseover="this.style.backgroundColor='#909090'"
+                       onmouseout="this.style.backgroundColor='#b0b0b0'">
+                        About
+                    </a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-toggle" class="btn-ghost btn-icon" aria-label="Toggle mobile menu">
+                        <svg class="h-6 w-6 text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="md:hidden pb-4 hidden">
+                <div class="flex flex-col space-y-3">
+                    <a href="index.html"
+                        class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                        Home
+                    </a>
+                    <a href="about.html"
+                        class="text-gray-600 hover:text-primary font-medium transition duration-150 mobile-link">
+                        About
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- main -->
+    <main>
+        <div class="w-[400px] max-w-full bg-white shadow-md rounded-lg p-8 mt-20" style="width: 500px; padding: 15px;">
+            <h1 class="text-xl font-bold mb-4 text-center text-title">Drunk Detection</h1>
+            <button id="remoteCameraButton"
+                class="w-full bg-secondary hover:bg-tertiary text-white font-bold py-2 px-4 rounded mb-4">
+                Connect to Remote Camera
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" class="block w-full mb-4">
+            <button id="uploadButton" class="w-full bg-primary_2 hover:bg-secondary text-white font-bold py-2 px-4 rounded">
+                Predict
+            </button>
+
+            <div id="result" class="mt-4 hidden">
+                <p id="predictionText" class="text-center font-semibold text-secondary"></p>
+                <img id="imageDisplay" class="mt-2 w-full hidden" alt="Processed Image">
+            </div>
+        </div>
+    </main>
+
+    <script src="../static/script.js"></script>
+    
+    <script type="module">
+	    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	    createChat({
+		    webhookUrl:
+                'https://ai4life.app.n8n.cloud/webhook/1c24f88a-e60e-4e2b-8bd0-e776bdfb879a/chat',
+            initialMessages: [
+                'Xin chào! 👋',
+                'Tôi là Drober. Chào mừng bạn truy cập vào trang web drunk & sober. Tôi có thể giúp gì cho bạn?'
+            ],
+            i18n: {
+                en: {
+                    title: 'Xin chào! 👋',
+                    subtitle: 'Bắt đầu trò chuyện. Chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7.',
+                    footer: '',
+                    getStarted: 'Cuộc trò chuyện mới',
+                    inputPlaceholder: 'Nhập câu hỏi của bạn...',
+                },
+            },
+	    });
+    </script>
+</body>
