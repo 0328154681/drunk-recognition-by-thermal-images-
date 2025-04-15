@@ -4,52 +4,81 @@ import datetime
 import cv2
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import load_model # phải cài đúng tensorflow==2.17.1 với chạy được 
+from flask_cors import CORS
+import base64
+import io
+from PIL import Image
+from tensorflow.keras.models import load_model  # Cần đúng version: tensorflow==2.17.1
+import joblib
+
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+CORS(app)
 
-# Load model TensorFlow (tải một lần khi chạy server để giảm thời gian load)
-model = load_model("model\Drunk_spectrum_hot_best.h5")
+# Load filter model 
+filter_model = joblib.load("model/spectrum_classifier.pkl")
+
+# Load drunk_recognition model
+model = load_model("model/Drunk_spectrum_hot_best.h5")
 
 UPLOAD_FOLDER = "uploads"
 DRUNK_FOLDER = "the_drunk"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(DRUNK_FOLDER, exist_ok=True)
 
+def is_spectrum_image(image_path):
+    img = cv2.imread(image_path)
+    img = cv2.resize(img, (64, 64))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    r, g, b = cv2.split(img)
+
+    def simple_entropy(ch):
+        hist = cv2.calcHist([ch], [0], None, [32], [0, 256])
+        hist = hist.ravel() / hist.sum()
+        hist = hist[hist > 0]
+        return -np.sum(hist * np.log2(hist))
+
+    features = []
+    for ch in [r, g, b]:
+        features.append(np.mean(ch))
+        features.append(np.std(ch))
+        features.append(simple_entropy(ch))
+
+    features = np.array(features).reshape(1, -1)
+
+    pred = filter_model.predict(features)[0]
+    print(f"🔍 Dự đoán filter_model:", pred, type(pred))  # debug
+
+    return int(pred)  # đảm bảo là số nguyên 0 hoặc 1
+
+
+
 def preprocess_image(image_path):
-    # Đọc ảnh hồng ngoại
-    infrared_image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
+    # Đọc ảnh gốc (giữ nguyên màu như người dùng đưa vào)
+    original_image = cv2.imread(image_path)
+    img_rgb = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
 
-    # Chuẩn hóa giá trị pixel
-    normalized_img = cv2.normalize(infrared_image, None, 0, 255, cv2.NORM_MINMAX)
-    normalized_img = np.uint8(normalized_img)
+    # Chuyển sang float32 để đưa vào model
+    img = img_rgb.astype(np.float32)
 
-    # Ánh xạ màu nhiệt
-    thermal_image = cv2.applyColorMap(normalized_img, cv2.COLORMAP_INFERNO)
+    # Resize ảnh theo đúng input của model
+    img = tf.keras.preprocessing.image.smart_resize(img, size=(256, 256), interpolation='bicubic')
 
-    img = cv2.cvtColor(thermal_image, cv2.COLOR_BGR2RGB)
-    
-    # Chuyển đổi sang float32
-    img = img.astype(np.float32)
-
-    # Resize ảnh
-    img = tf.keras.preprocessing.image.smart_resize(img, size=(256,256), interpolation='bicubic')
-    
-    # Chuẩn hóa
+    # Chuẩn hóa về [0, 1]
     img -= img.min()
     img /= (img.max() - img.min())
 
-    return img
+    return img, img_rgb  # img: để predict, img_rgb: ảnh gốc giữ nguyên màu
+
 
 @app.route('/')
 def index():
     return render_template("index.html")
 
-@app.route("/about.html")  # Thêm route này
+@app.route("/about.html")
 def about():
     return render_template("about.html")
 
-# Route để tự động phục vụ ảnh từ thư mục images
 @app.route("/images/<path:filename>")
 def serve_images(filename):
     return send_from_directory("images", filename)
@@ -57,27 +86,6 @@ def serve_images(filename):
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory("static", "favicon.ico", mimetype="image/vnd.microsoft.icon")
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     if 'image' not in request.files:
-#         return jsonify({"success": False, "message": "No image uploaded"})
-
-#     file = request.files['image']
-#     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
-#     file.save(filepath)
-
-#     img = preprocess_image(filepath)
-#     prediction = model.predict(np.expand_dims(img, axis=0))
- 
-
-    
-#     is_drunk = bool(prediction[0][0] > 0.4)
-#     message = "Người này say." if is_drunk else "Người này không say."
-#     # in nguong cho tam hinh model predict
-
-
-#     return jsonify({"success": True, "is_drunk": is_drunk, "message": message})
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -88,22 +96,39 @@ def predict():
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
 
-    img = preprocess_image(filepath)
+    # Bộ lọc trước khi predict
+    spectrum_flag = is_spectrum_image(filepath)
+    print(f"🔍 Dự đoán filter_model:", spectrum_flag, type(spectrum_flag))
+    if spectrum_flag != 1:
+        return jsonify({
+            "success": True,
+            "message": "Ảnh không phải spectrum. Vui lòng dùng ảnh nhiệt.",
+            "is_spectrum": False
+        }), 200  # vẫn trả HTTP 200 để không coi là lỗi phía client
+    
+    img, original_image = preprocess_image(filepath)
     prediction = model.predict(np.expand_dims(img, axis=0))
 
-    # In ra ngưỡng (score) dự đoán
     threshold_score = float(prediction[0][0])
     print(f"Ngưỡng dự đoán: {threshold_score:.4f}")  # hoặc chỉ cần print(threshold_score)
 
-    is_drunk = bool(threshold_score > 0.4)
+    is_drunk = bool(prediction[0][0] > 0.4)
     message = "Người này say." if is_drunk else "Người này không say."
+
+    # Convert ảnh gốc thành base64
+    image_for_display = Image.fromarray(original_image)  # original_image là RGB dạng uint8
+    buffered = io.BytesIO()
+    image_for_display.save(buffered, format="JPEG")
+    image_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
     return jsonify({
         "success": True,
         "is_drunk": is_drunk,
         "message": message,
-        "threshold": threshold_score  # Có thể trả về luôn nếu bạn muốn hiển thị trên client
+        "threshold": threshold_score,
+        "image_base64": image_base64
     })
+
 
 @app.route('/save_image', methods=['POST'])
 def save_image():
@@ -119,4 +144,5 @@ def save_image():
     return jsonify({"success": True, "message": "Image saved successfully"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+

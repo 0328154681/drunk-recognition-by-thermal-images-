@@ -708,3 +708,42 @@ ul {
 .h-half {
     height: 25rem;
 }
+
+body {
+    background-color: white;
+    /* Mặc định là nền trắng */
+}
+
+/* Nếu muốn thêm ảnh nền, chỉ cần bỏ comment dòng background-image */
+.background-active {
+    /*background-image: url('../images/background.jpg'); /* Đường dẫn đến ảnh */
+    background-size: cover;
+    /* Phủ toàn bộ màn hình */
+    background-position: center;
+    /* Căn giữa ảnh */
+    background-repeat: no-repeat;
+    /* Không lặp lại */
+    background-attachment: fixed;
+    /* Cố định background */
+}
+
+header {
+    background: linear-gradient(90deg, rgb(244, 143, 143), rgb(230, 198, 139), rgb(230, 230, 133), rgb(146, 228, 146), rgb(165, 165, 237), rgb(200, 142, 242), violet);
+    background-size: 400% 400%;
+    animation: rainbowFlow 6s infinite linear;
+}
+
+@keyframes rainbowFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Ẩn camera mặc định */
+#cameraWrapper {
+    display: none;
+}
