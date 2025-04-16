@@ -59,11 +59,17 @@ uploadButton.addEventListener('click', async () => {
 
         const data = await response.json();
         if (data.success) {
-            imageDisplay.src = URL.createObjectURL(file);
-            imageDisplay.classList.remove('hidden');
-            result.classList.remove('hidden');
-            predictionText.textContent = data.message;
-            if (data.is_drunk) saveDrunkImage(imageDisplay.src);
+            const reader = new FileReader();
+            reader.onload = function () {
+                const dataURL = reader.result;
+                imageDisplay.src = dataURL;
+                imageDisplay.classList.remove('hidden');
+                result.classList.remove('hidden');
+                predictionText.textContent = data.message;
+
+                if (data.is_drunk) saveDrunkImage(dataURL, file.name);  // Truyền thêm tên gốc
+            };
+            reader.readAsDataURL(file);
         } else {
             alert('Prediction failed. Please try again.');
         }
@@ -135,8 +141,13 @@ async function captureAndPredict() {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const imageDataUrl = canvas.toDataURL('image/jpeg');
+
+    // Tạo tên file theo timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-'); // tránh lỗi tên file
+    const filename = `capture_${timestamp}.jpg`;
+
     const formData = new FormData();
-    formData.append('image', dataURLtoBlob(imageDataUrl), 'capture.jpg');
+    formData.append('image', dataURLtoBlob(imageDataUrl), filename); // dùng tên mới
 
     try {
         const response = await fetch('http://127.0.0.1:5000/predict', {
@@ -153,7 +164,7 @@ async function captureAndPredict() {
             predictionText.textContent = data.message;
 
             if (data.is_drunk) {
-                saveDrunkImage(imageDataUrl);
+                saveDrunkImage(imageDataUrl, filename);  // truyền tên ảnh để lưu
             }
         } else {
             alert('Prediction failed. Please try again.');
@@ -163,6 +174,7 @@ async function captureAndPredict() {
         alert('Connection error with the server.');
     }
 }
+
 
 // ===========================
 // Utility Functions
@@ -178,9 +190,9 @@ function dataURLtoBlob(dataURL) {
     return new Blob([ab], { type: mimeString });
 }
 
-async function saveDrunkImage(imageDataUrl) {
+async function saveDrunkImage(imageDataUrl, filename) {
     const formData = new FormData();
-    formData.append('image', dataURLtoBlob(imageDataUrl));
+    formData.append('image', dataURLtoBlob(imageDataUrl), filename);
 
     try {
         const response = await fetch('http://127.0.0.1:5000/save_image', {
@@ -196,3 +208,5 @@ async function saveDrunkImage(imageDataUrl) {
         console.error('Error saving image:', error);
     }
 }
+
+
