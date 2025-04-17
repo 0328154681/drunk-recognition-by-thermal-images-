@@ -10,6 +10,7 @@ import io
 from PIL import Image
 from tensorflow.keras.models import load_model  # Cần đúng version: tensorflow==2.17.1
 import joblib
+from ultralytics import YOLO
 
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
@@ -18,13 +19,12 @@ CORS(app)
 # Load filter model 
 filter_model = joblib.load("model/spectrum_classifier.pkl")
 
+# Load YOLO model
+yolo_model = YOLO("model/yolo_model.pt")
+
 # Load drunk_recognition model
 model = load_model("model/Drunk_spectrum_hot_best.h5")
 
-UPLOAD_FOLDER = "uploads"
-DRUNK_FOLDER = "the_drunk"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(DRUNK_FOLDER, exist_ok=True)
 
 def is_spectrum_image(image_path):
     img = cv2.imread(image_path)
@@ -51,7 +51,15 @@ def is_spectrum_image(image_path):
 
     return int(pred)  # đảm bảo là số nguyên 0 hoặc 1
 
+def face_recognition(image_path):
+    img = cv2.imread(image_path)
+    results = yolo_model(img)
 
+    pred_class = results[0].probs.top1  # 0 nếu no_face, 1 nếu has_face (tuỳ theo thư mục bạn đặt ban đầu)
+
+    print(pred_class)
+    
+    return pred_class
 
 def preprocess_image(image_path):
     # Đọc ảnh gốc (giữ nguyên màu như người dùng đưa vào)
@@ -70,6 +78,11 @@ def preprocess_image(image_path):
 
     return img, img_rgb  # img: để predict, img_rgb: ảnh gốc giữ nguyên màu
 
+
+UPLOAD_FOLDER = "uploads"
+DRUNK_FOLDER = "the_drunk"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(DRUNK_FOLDER, exist_ok=True)
 
 @app.route('/')
 def index():
@@ -99,7 +112,15 @@ def predict():
     # Bộ lọc trước khi predict
     spectrum_flag = is_spectrum_image(filepath)
     print(f"🔍 Dự đoán filter_model:", spectrum_flag, type(spectrum_flag))
-    if spectrum_flag != 1:
+    face_recog = face_recognition(filepath)
+    print(f"👀 Face recognition:", face_recog, type(face_recog))
+    if face_recog != 1:
+        return jsonify({
+            "success": True,
+            "message": "Mô hình chỉ dự đoán trên ảnh nhiệt gương mặt. Vui lòng dùng ảnh nhiệt gương mặt.",
+            "face_recognition": False
+        }), 200  # vẫn trả HTTP 200 để không coi là lỗi phía client
+    elif spectrum_flag != 1:
         return jsonify({
             "success": True,
             "message": "Ảnh không phải spectrum. Vui lòng dùng ảnh nhiệt.",
