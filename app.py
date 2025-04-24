@@ -23,7 +23,7 @@ filter_model = joblib.load("model/spectrum_classifier.pkl")
 yolo_model = YOLO("model/yolo_model.pt")
 
 # Load drunk_recognition model
-model = load_model("model/Drunk_spectrum_hot_best.h5")
+model = load_model("model/RestNet-1_epoch41-acc 0.9364.weights.keras")
 
 
 def is_spectrum_image(image_path):
@@ -133,7 +133,7 @@ def predict():
     threshold_score = float(prediction[0][0])
     print(f"Ngưỡng dự đoán: {threshold_score:.4f}")  # hoặc chỉ cần print(threshold_score)
 
-    is_drunk = bool(prediction[0][0] > 0.4)
+    is_drunk = bool(prediction[0][0] > 0.588)
     message = "Người này say." if is_drunk else "Người này không say."
 
     # Convert ảnh gốc thành base64
